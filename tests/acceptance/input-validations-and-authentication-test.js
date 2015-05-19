@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import {module, test} from 'qunit';
 import startApp from '../helpers/start-app';
 
 
@@ -10,7 +11,7 @@ var application,
 
 
 module('Acceptance: InputValidationsAndAuthentication', {
-  setup: function() {
+  beforeEach: function() {
     MockFirebase.override();
 
     application = startApp();
@@ -21,19 +22,19 @@ module('Acceptance: InputValidationsAndAuthentication', {
     
     fbRef.autoFlush();
   },
-  teardown: function() {
+  afterEach: function() {
     invalidateSession();
     MockFirebase.restore();
     Ember.run(application, 'destroy');
   }
 });
 
-test('signup validates and logs the user in', function() {
+test('signup validates and logs the user in', function(assert) {
   visit('/signup');
 
   andThen(function() {
-    equal(currentPath(), 'signup');
-    ok(!session.isAuthenticated);
+    assert.equal(currentPath(), 'signup');
+    assert.ok(!session.isAuthenticated);
   });
 
   var testUid = 'testUid' + Math.random().toString(36).substr(2, 5),
@@ -41,77 +42,77 @@ test('signup validates and logs the user in', function() {
       testerPassword = 'testerpassword';
 
   andThen(function() {
-    equal(find('.input-error').length, 0);
+    assert.equal(find('.input-error').length, 0);
   });
 
   click('button[type="submit"]');
 
   andThen(function() {
-    equal(find('.input-error').length, 3);
+    assert.equal(find('.input-error').length, 3);
   });
 
   // name-group
   fillIn('.name-group > input', '');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.name-group .input-error').length, 1);
+    assert.equal(find('.name-group .input-error').length, 1);
   });
 
   fillIn('.name-group > input', 'Tester');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.name-group .input-error').length, 0);
+    assert.equal(find('.name-group .input-error').length, 0);
   });
 
   // email-group
   fillIn('.email-group > input', '');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 1);
+    assert.equal(find('.email-group .input-error').length, 1);
   });
 
   fillIn('.email-group > input', 'asd');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 1);
+    assert.equal(find('.email-group .input-error').length, 1);
   });
 
   fillIn('.email-group > input', 'asd@qwe');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 1);
+    assert.equal(find('.email-group .input-error').length, 1);
   });
 
   fillIn('.email-group > input', testerEmail);
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 0);
+    assert.equal(find('.email-group .input-error').length, 0);
   });
 
   // password-group
   fillIn('.password-group > input', '');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.password-group .input-error').length, 1);
+    assert.equal(find('.password-group .input-error').length, 1);
   });
 
   fillIn('.password-group > input', '12');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.password-group .input-error').length, 1);
+    assert.equal(find('.password-group .input-error').length, 1);
   });
 
   andThen(function() {
-    ok(!session.isAuthenticated, 'the global session is not authenticated yet');
-    ok(!fbRef.getEmailUser(testerEmail), 'no user created yet');
-    ok(!fbRef.getAuth(), 'firebase is logged out');
+    assert.ok(!session.isAuthenticated, 'the global session is not authenticated yet');
+    assert.ok(!fbRef.getEmailUser(testerEmail), 'no user created yet');
+    assert.ok(!fbRef.getAuth(), 'firebase is logged out');
   });
 
 
   fillIn('.password-group > input', testerPassword);
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.password-group .input-error').length, 0, 'correct password input');
+    assert.equal(find('.password-group .input-error').length, 0, 'correct password input');
   });
 
   andThen(function() {
@@ -129,20 +130,20 @@ test('signup validates and logs the user in', function() {
   });
 
   andThen(function() {
-    ok(session.isAuthenticated, 'user was authenticated on the global session');
-    ok(fbRef.getEmailUser(testerEmail), 'user created on firebase\'s login');
-    ok(fbRef.getAuth(), 'firebase is logged in');
+    assert.ok(session.isAuthenticated, 'user was authenticated on the global session');
+    assert.ok(fbRef.getEmailUser(testerEmail), 'user created on firebase\'s login');
+    assert.ok(fbRef.getAuth(), 'firebase is logged in');
   });
 });
 
 
 
-test('login validates and logs the user in, and logout button works', function() {
+test('login validates and logs the user in, and logout button works', function(assert) {
   visit('/signin');
 
   andThen(function() {
-    equal(currentPath(), 'signin');
-    ok(!session.isAuthenticated);
+    assert.equal(currentPath(), 'signin');
+    assert.ok(!session.isAuthenticated);
   });
 
   var testUid = 'testUid' + Math.random().toString(36).substr(2, 5),
@@ -150,57 +151,57 @@ test('login validates and logs the user in, and logout button works', function()
       testerPassword = 'testerpassword';
 
   andThen(function() {
-    equal(find('.input-error').length, 0);
+    assert.equal(find('.input-error').length, 0);
   });
 
   click('button[type="submit"]');
 
   andThen(function() {
-    equal(find('.input-error').length, 2);
+    assert.equal(find('.input-error').length, 2);
   });
 
   // email-group
   fillIn('.email-group > input', '');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 1);
+    assert.equal(find('.email-group .input-error').length, 1);
   });
 
   fillIn('.email-group > input', 'asd');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 1);
+    assert.equal(find('.email-group .input-error').length, 1);
   });
 
   fillIn('.email-group > input', 'asd@qwe');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 1);
+    assert.equal(find('.email-group .input-error').length, 1);
   });
 
   fillIn('.email-group > input', testerEmail);
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 0);
+    assert.equal(find('.email-group .input-error').length, 0);
   });
 
   // password-group
   fillIn('.password-group > input', '');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.password-group .input-error').length, 1);
+    assert.equal(find('.password-group .input-error').length, 1);
   });
 
   andThen(function() {
-    ok(!session.isAuthenticated, 'the global session is not authenticated yet');
-    ok(!fbRef.getAuth(), 'firebase is logged out');
+    assert.ok(!session.isAuthenticated, 'the global session is not authenticated yet');
+    assert.ok(!fbRef.getAuth(), 'firebase is logged out');
   });
 
 
   fillIn('.password-group > input', testerPassword);
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.password-group .input-error').length, 0, 'correct password input');
+    assert.equal(find('.password-group .input-error').length, 0, 'correct password input');
   });
 
   andThen(function() {
@@ -218,70 +219,70 @@ test('login validates and logs the user in, and logout button works', function()
   });
 
   andThen(function() {
-    ok(session.isAuthenticated, 'user was authenticated on the global session');
-    ok(fbRef.getAuth(), 'firebase is logged in');
+    assert.ok(session.isAuthenticated, 'user was authenticated on the global session');
+    assert.ok(fbRef.getAuth(), 'firebase is logged in');
   });
 
   click('button.logout-button');
 
   andThen(function() {
-    ok(!session.isAuthenticated, 'the global session is not authenticated');
-    ok(!fbRef.getAuth(), 'firebase is logged out');
+    assert.ok(!session.isAuthenticated, 'the global session is not authenticated');
+    assert.ok(!fbRef.getAuth(), 'firebase is logged out');
   });
 });
 
 
 
-test('forgot-password validates', function() {
+test('forgot-password validates', function(assert) {
   visit('/forgot-password');
 
   andThen(function() {
-    equal(currentPath(), 'forgot-password');
-    ok(!session.isAuthenticated);
+    assert.equal(currentPath(), 'forgot-password');
+    assert.ok(!session.isAuthenticated);
   });
 
   var testUid = 'testUid' + Math.random().toString(36).substr(2, 5),
       testerEmail = testUid + '@test.com';
 
   andThen(function() {
-    equal(find('.input-error').length, 0);
+    assert.equal(find('.input-error').length, 0);
   });
 
   click('button[type="submit"]');
 
   andThen(function() {
-    equal(find('.input-error').length, 1);
+    assert.equal(find('.input-error').length, 1);
   });
 
   // email-group
   fillIn('.email-group > input', '');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 1);
+    assert.equal(find('.email-group .input-error').length, 1);
   });
 
   fillIn('.email-group > input', 'asd');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 1);
+    assert.equal(find('.email-group .input-error').length, 1);
   });
 
   fillIn('.email-group > input', 'asd@qwe');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 1);
+    assert.equal(find('.email-group .input-error').length, 1);
   });
 
   fillIn('.email-group > input', testerEmail);
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.email-group .input-error').length, 0);
+    assert.equal(find('.email-group .input-error').length, 0);
   });
 });
 
 
 
-test('reset-password validates and logs the user in', function() {
+test('reset-password validates and logs the user in', function(assert) {
   var testUid = 'testUid' + Math.random().toString(36).substr(2, 5),
       testerEmail = testUid + '@test.com',
       testerPassword = 'testerpassword',
@@ -306,43 +307,43 @@ test('reset-password validates and logs the user in', function() {
   visit('/reset-password?userEmail=' + testerEmail + '&resetCode=' + testerPassword);
 
   andThen(function() {
-    equal(currentPath(), 'reset-password');
-    ok(!session.isAuthenticated);
+    assert.equal(currentPath(), 'reset-password');
+    assert.ok(!session.isAuthenticated);
   });
 
   andThen(function() {
-    equal(find('.input-error').length, 0);
+    assert.equal(find('.input-error').length, 0);
   });
 
   click('button[type="submit"]');
 
   andThen(function() {
-    equal(find('.input-error').length, 1, 'form has errors');
+    assert.equal(find('.input-error').length, 1, 'form has errors');
   });
 
   // password-group
   fillIn('.password-group > input', '');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.password-group .input-error').length, 1, 'password must be present');
+    assert.equal(find('.password-group .input-error').length, 1, 'password must be present');
   });
 
   fillIn('.password-group > input', '12');
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.password-group .input-error').length, 1);
+    assert.equal(find('.password-group .input-error').length, 1);
   });
 
   andThen(function() {
-    ok(!session.isAuthenticated, 'the global session is not authenticated yet');
-    ok(!fbRef.getAuth(), 'firebase is logged out');
+    assert.ok(!session.isAuthenticated, 'the global session is not authenticated yet');
+    assert.ok(!fbRef.getAuth(), 'firebase is logged out');
   });
 
 
   fillIn('.password-group > input', newTesterPassword);
   click('button[type="submit"]');
   andThen(function() {
-    equal(find('.password-group .input-error').length, 0, 'correct password input');
+    assert.equal(find('.password-group .input-error').length, 0, 'correct password input');
   });
 
   andThen(function() {
@@ -360,7 +361,7 @@ test('reset-password validates and logs the user in', function() {
   });
 
   andThen(function() {
-    ok(session.isAuthenticated, 'user was authenticated on the global session');
-    ok(fbRef.getAuth(), 'firebase is logged in');
+    assert.ok(session.isAuthenticated, 'user was authenticated on the global session');
+    assert.ok(fbRef.getAuth(), 'firebase is logged in');
   });
 });

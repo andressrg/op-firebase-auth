@@ -2,15 +2,22 @@ import Ember from 'ember';
 import { initialize } from '../../../initializers/firebase-service';
 import { module, test } from 'qunit';
 
+
+/* globals MockFirebase */
+
 var container, application;
 
 module('FirebaseServiceInitializer', {
   beforeEach: function() {
     Ember.run(function() {
+      MockFirebase.override();
       application = Ember.Application.create();
       container = application.__container__;
       application.deferReadiness();
     });
+  },
+  afterEach: function() {
+    MockFirebase.restore();
   }
 });
 

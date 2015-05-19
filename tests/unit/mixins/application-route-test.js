@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import {module, test} from 'qunit';
 import ApplicationRouteMixin from 'op-firebase-auth/mixins/application-route';
 
 /* globals MockFirebase */
@@ -6,7 +7,7 @@ import ApplicationRouteMixin from 'op-firebase-auth/mixins/application-route';
 module('ApplicationRouteMixin');
 
 // Replace this with your real tests.
-test('it works', function() {
+test('it works', function(assert) {
   var ApplicationRouteObject = Ember.Object.extend(ApplicationRouteMixin);
   
   // mock firebase injection
@@ -15,5 +16,5 @@ test('it works', function() {
   });
   
   var subject = ApplicationRouteObject.create();
-  ok(subject);
+  assert.ok(subject);
 });
