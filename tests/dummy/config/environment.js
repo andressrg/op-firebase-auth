@@ -6,6 +6,7 @@ module.exports = function(environment) {
     environment: environment,
     baseURL: '/',
     locationType: 'auto',
+    firebase: 'https://test.firebaseio.com',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -51,7 +52,7 @@ module.exports = function(environment) {
     URLSchemeDomain: 'occamsapp',
   };
 
-  ENV.firebase_url = 'https://test.firebaseio.com';
+  // ENV.firebase = 'https://test.firebaseio.com';
 
   return ENV;
 };

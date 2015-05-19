@@ -51,9 +51,9 @@ module.exports = {
       production: app.bowerDirectory + '/firebase/firebase.js'
     });
 
-    this.app.import({
-      development: app.bowerDirectory + '/emberfire/dist/emberfire.js',
-      production: app.bowerDirectory + '/emberfire/dist/emberfire.min.js'
-    });
+    // this.app.import({
+    //   development: app.bowerDirectory + '/emberfire/dist/emberfire.js',
+    //   production: app.bowerDirectory + '/emberfire/dist/emberfire.min.js'
+    // });
   }
 };
